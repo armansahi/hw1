@@ -21,35 +21,29 @@ void split(Node*& in, Node*& odds, Node*& evens)
   if (in == nullptr) {
     return; // list is empty stop recursion
   }
-  Node* next = in->next; // save reference to next node
-  if (in->value % 2 == 0) { // check for even value
-    if (evens == nullptr) { // if even list is empty
-      evens= in; // initialize with current node
+  Node* curr = in; // save reference to next node, detatch curr node
+  in = in->next;
+  curr->next = nullptr;
+
+  if (curr->value % 2 == 0) {
+    if (evens == nullptr) {
+      evens = curr; // initialize evens if empty
     }
     else {
-      Node* temp = evens; 
-      while (temp->next != nullptr) {
-        temp = temp->next; 
-      }
-      temp->next = in; // traverse to last node, attatch in at end
+      curr->next = evens; // link new node with curr front of evens
+      evens = curr; // update front of evens list
     }
-    in->next = nullptr;
   }
   else {
     if (odds == nullptr) {
-      odds = in; // if odd list empty, initialize with curr node
+      odds = curr; // initialize odds if empty
     }
     else {
-      Node* temp = odds;
-      while (temp->next != nullptr) {
-        temp = temp->next;
-      }
-      temp->next = in; // traverse to last node, push in at end
+      curr->next = odds; // link new node with curr front of odd
+      odds = curr; // update front of odds list
     }
-    in->next = nullptr; // before recursion pop curr node from original list
   }
-  in = nullptr; // nullify in so doesnt point to original list
-  split(next,odds,evens); // recursion
+  split(in, odds, evens); // recursive call
 }
 
 /* If you needed a helper function, write it here */
